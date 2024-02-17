@@ -68,11 +68,10 @@ export class MapHandler{
         let clickedMapTileX = Math.floor((x - mapDrawX)/16);
         let clickedMapTileY = Math.floor((y - mapDrawY)/16);
 
-        if(this.map.checkIfClickedEvent()){
-
-        }
-        
-        this.player.setMoveTarget(clickedMapTileX, clickedMapTileY);
+        //check the map event tiles to see if we clicked an event and
+        const clickedEvent = this.map.checkClickedTileForEvent(clickedMapTileX, clickedMapTileY);
+        if(clickedEvent) this.player.setEventTarget(clickedMapTileX, clickedMapTileY);
+        else this.player.setMoveTarget(clickedMapTileX, clickedMapTileY);
     }
 
     onHoverTile(x, y){
@@ -177,6 +176,10 @@ export class MapHandler{
             this.pixelOffsetX = offset;
             this.pixelOffsetY = 0;
         }
+    }
+
+    mapWarp(mapID){
+        this.map.setMapByID(mapID);
     }
 
 }

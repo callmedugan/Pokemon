@@ -57,11 +57,11 @@ export class Player{
         }
         else if(this.hasMoveTarget){
             //find out if we have reached the target
-            if(this.positionX === this.moveTargetX && this.positionY === this.moveTargetY){
-                this.hasMoveTarget = false;
-                this.hasAnimation = false;
+            if((this.positionX === this.moveTargetX && this.positionY === this.moveTargetY) ||
+                this.targetIsEvent && this.movePath.length <= 1){
+                this.onTargetReached();
             }
-            //otherwise we will mvoe the player and update path
+            //otherwise we will move the player and update path
             else{
                 this.positionX = this.movePath[1][0];
                 this.positionY = this.movePath[1][1];
@@ -84,11 +84,17 @@ export class Player{
         this.animator.update(this.img, ctx, this.game, this.drawX * 16 + xOffset, this.drawY * 16 + yOffset, this.sizeX, this.sizeY, this.moveDirection, isAnimatingThisTick);
     }
 
+    setEventTarget(x, y){
+        this.setMoveTarget(x, y);
+        this.targetIsEvent = true;
+    }
+
     setMoveTarget(x, y){
         //this is only set if we are the last step of a current path or we dont have a path
         if(this.movePath.length <= 1) this.waitForTickToAnimate = true;
         this.moveTargetX = x;
         this.moveTargetY = y;
+        this.targetIsEvent = false;
     }
 
     updatePathFinding(){
@@ -99,33 +105,69 @@ export class Player{
         this.hasMoveTarget = (this.movePath !== undefined && this.movePath.length > 0);
 
         //set direction
-        if(this.movePath.length > 1) this.setMoveDirection();
+        this.setFaceDirection();
     }
 
     getPath(x, y){
         //get binary collision map
         let collision = this.game.map.getCollisionMatrixAsBinary(this.positionX, this.positionY);
+
         //determine if the target is within the pathfinding matrix
         if( x< 0 || y < 0 || x >= collision.length - 1 || y >= collision[0].length - 1){
             return [0, 0];
         }
-        //initializing the objects for pathfinding
+
+        //set the event as walkable to find a path to a wall or unwalkable tile
+        if(this.targetIsEvent){
+            //coordinates are backwards on purpose
+            collision[y][x] = 0;
+            let pathFinderGrid = new PF.Grid(collision);
+            let returnPath = this.pathFinder.findPath(this.positionX, this.positionY, x, y, pathFinderGrid);
+            //remove the last tile
+            //if(returnPath.length > 1) 
+            returnPath.pop();
+            return returnPath;
+        }
+        //init return path - normal route
         let pathFinderGrid = new PF.Grid(collision);
+        //initializing the objects for pathfinding
         //to find a path
         return this.pathFinder.findPath(this.positionX, this.positionY, x, y, pathFinderGrid);
     }
 
-    //called after we find a path
-    setMoveDirection(){
-        const x = this.movePath[1][0] - this.positionX;
-        const y = this.movePath[1][1] - this.positionY;
+    //called to face an event or direction we are moving
+    setFaceDirection(){
+        let x = 0;
+        let y = 0;
+        if(this.movePath.length > 1){
+            x = this.movePath[1][0] - this.positionX;
+            y = this.movePath[1][1] - this.positionY;
+        }
+        else{
+            x = this.moveTargetX - this.positionX;
+            y = this.moveTargetY - this.positionY;
+        }
         //default
         //this.moveDirection = directions.DOWN;
         if(x !== 0) this.moveDirection = x > 0 ? directions.RIGHT : directions.LEFT;
         else if (y !== 0) this.moveDirection = y > 0 ? directions.DOWN : directions.UP;
-
     }
 
     //called when we reach the target
+    onTargetReached(){
+        if(this.targetIsEvent){
+            this.setFaceDirection();
+            this.game.eventHandler.startEvent(this.moveTargetX, this.moveTargetY);
+        }
+        this.hasMoveTarget = false;
+        this.hasAnimation = false;
+        this.targetIsEvent = false;
+    }
+
+    mapWarp(playerX, playerY, direction){
+        this.positionX = playerX;
+        this.positionY = playerY;
+        this.moveDirection = direction;
+    }
 
 }

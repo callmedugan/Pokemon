@@ -2,6 +2,7 @@ import { Player } from "./player.js";
 import { Map } from "./map.js";
 import { InputHandler } from "./input.js";
 import { MapHandler } from "./mapHandler.js";
+import { EventHandler } from "./EventHandler.js";
 
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
@@ -26,6 +27,8 @@ class Game{
         this.map = new MapHandler(this);
         //create input handler
         this.input = new InputHandler(this, ctx);
+        //create event handler which will override functionality in multiple components
+        this.eventHandler = new EventHandler(this, this.map, this.player, this.input);
     }
 
     //runs calculations every frame

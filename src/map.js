@@ -3,6 +3,13 @@ const eventTypes = {
     WARP: 0,
 }
 
+const directions = {
+    DOWN: 0,
+    UP: 1,
+    LEFT: 2,
+    RIGHT: 3
+}
+
 export class Map{
     constructor(game, mapID){
         this.game = game;
@@ -24,8 +31,14 @@ export class Map{
         }
     }
 
-    checkIfClickedEvent(){
+    checkClickedTileForEvent(x, y){
+        //no clue why the tiles are transposing from tiled for this
+        return this.events[y][x] !== -1;
+    }
 
+    getEventData(x, y){
+        //no clue why the tiles are transposing from tiled for this again
+        return this.eventData[this.events[y][x]];
     }
 
     map0 = {
@@ -5810,9 +5823,9 @@ export class Map{
         //type, mapdestID, destX, destY
 
         eventData : [
-            [eventTypes.WARP, 1, 10, 10],
-            [eventTypes.WARP, 1, 10, 10],
-            [eventTypes.WARP, 1, 10, 10],
+            [eventTypes.WARP, 0, 18, 10, directions.DOWN],
+            [eventTypes.WARP, 0, 9, 13, directions.DOWN],
+            [eventTypes.WARP, 0, 18, 10, directions.DOWN],
         ]
     }
 
