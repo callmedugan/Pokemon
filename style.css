@@ -1,0 +1,70 @@
+:root{
+    --screen-height: 400px;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 5px;
+}
+
+body{
+    background-color: #ecf2f8;
+}
+
+
+#left-container{
+    display: flex;
+    gap: 10px;
+}
+
+#screen-container{
+    display: flex;
+}
+
+#right-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#tilemap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+}
+
+#game-canvas{
+    width: 400px;
+    height: var(--screen-height);
+    background-color: black;
+    /* position: relative; */
+    /* overflow: hidden; */
+}
+
+.sprite{
+    display: none;
+}
+
+.window{
+    border: 4px solid black;
+    background-color: #93a8a8;
+    border-radius: 7px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+#team-window{
+    width: 200px;
+    height: var(--screen-height);
+}
+
+#inventory-window{
+    width: 200px;
+    flex-basis: 70%;
+}
+
+#chat-window{
+    width: 200px;
+    flex-basis: 30%;
+}

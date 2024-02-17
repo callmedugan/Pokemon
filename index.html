@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="src/img/pokeball-icon.png" type="image/png">
+
+</head>
+<body>
+
+    <div id="screen-container">
+        <div id="left-container">
+            <div id="team-window" class="window">
+            </div>
+            <canvas id="game-canvas">
+            </canvas>
+            <img class="sprite" id="playerImg" src="src/img/player.png" alt="">
+            <img class="sprite" id="tileSet" src="src/img/waterAnimationTiles.png" alt="">
+            <img class="sprite" id="buildingTiles" src="src/img/buildings.png" alt="">
+        </div>
+        <div id="right-container">
+            <div id="inventory-window" class="window">
+             </div>
+             <div id="chat-window" class="window">
+             </div>
+         </div>
+    </div>
+
+</body>
+
+<script type="text/javascript" src="import\pathfinding-browser.min.js"></script>
+<script type="module" src="src/main.js"></script>
+
+</html>
