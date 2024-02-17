@@ -5,6 +5,12 @@ export class InputHandler{
         this.canvas = ctx.canvas;
         this.canvasRect = new DOMRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+        window.addEventListener('pointerdown', e => {
+            //determine if touch was within the canvas
+            if(this.isMouseEventInCanvas(e))
+            this.game.map.onClickedTile(e.pageX - this.canvasRect.x, e.pageY - this.canvasRect.y);
+        })
+
         window.addEventListener('mousedown', e => {
             //determine if mouse click was within the canvas
             if(this.isMouseEventInCanvas(e))
