@@ -13,7 +13,7 @@ export class InputHandler{
         })
 
         window.addEventListener('mousedown', e => {
-            //determine if mouse click was within the canvas
+            //determine if click was within the canvas
             if(this.allowPlayerMovement && this.isMouseEventInCanvas(e))
             this.game.map.onClickedTile(e.pageX - this.canvasRect.x, e.pageY - this.canvasRect.y);
         })

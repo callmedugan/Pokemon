@@ -8,19 +8,21 @@ const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 
 //set the width and height since the canvas is not inherently set by css
+canvas.style.height = '400px'
+canvas.style.width = '400px'
 canvas.width = 400;
 canvas.height = 400;
 
 class Game{
 
-    constructor(width, height){
-        this.width = width;
-        this.height = height;
-        this.tileSize = 16;
+    constructor(){
+        this.width = canvas.width;
+        this.height = canvas.height;
+        //scale
         this.scale = 1;
         //create an instance of a player class
         this.player = new Player(this);
-        this.tick = 400;
+        this.tick = 300;
         this.oldTimeStamp = 0;
         this.tickTimer = 0;
         //create a map instance
@@ -29,6 +31,7 @@ class Game{
         this.input = new InputHandler(this, ctx);
         //create event handler which will override functionality in multiple components
         this.eventHandler = new EventHandler(this, this.map, this.player, this.input);
+
     }
 
     //runs calculations every frame
@@ -56,7 +59,7 @@ class Game{
 window.addEventListener('load', function(){
 
     //create new instance of a game class
-    const game = new Game(canvas.width, canvas.height);
+    const game = new Game();
 
     function mainUpdateLoop(timeStamp){
         //set your tick time

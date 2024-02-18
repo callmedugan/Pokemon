@@ -50,6 +50,7 @@ export class Player{
 
     //called at the beginning of every tick
     tickStart(input, ctx, deltaTime){
+        this.animator.tickStart();
         if(this.waitForTickToAnimate){
             this.hasAnimation = true;
             this.waitForTickToAnimate = false;

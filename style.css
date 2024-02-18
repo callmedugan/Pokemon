@@ -1,6 +1,6 @@
-:root{
-    --screen-height: 400px;
-}
+/* :root{
+    --screen-height: 368px;
+} */
 
 *{
     box-sizing: border-box;
@@ -38,7 +38,7 @@ body{
 #game-canvas{
     /* image-rendering: pixelated; */
     image-rendering: crisp-edges;
-    width: 400px;
+    /* width: 368px; */
     height: var(--screen-height);
     background-color: black;
     /* position: relative; */

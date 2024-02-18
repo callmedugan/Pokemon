@@ -8,14 +8,21 @@ const directions = {
 export class Animator{
     constructor(){
         this.directionFacing = directions.DOWN;
-        this.animationFrameCount = 4;
+        this.animationFrameCount = 2;
+        this.usingRightFoot = false;
+    }
+
+    tickStart(){
+        this.usingRightFoot = !this.usingRightFoot;
     }
 
     update(img, ctx, game, drawX, drawY, sizeX, sizeY, direction, isMoving){
         const tTimer = game.tickTimer;
         const t = game.tick;
         //find the percentage between the tick timer and tick length and use it to pick a sprite
-        const spriteX = isMoving ? Math.floor((tTimer/t) * this.animationFrameCount) : 0;
+        let spriteX = isMoving ? Math.floor((tTimer/t) * this.animationFrameCount) : 0;
+        //alternate feet
+        if(spriteX === 1 && this.usingRightFoot) spriteX = 3;
         //draw player
         ctx.drawImage(img,
             spriteX * sizeX, direction * sizeY, sizeX, sizeY,
