@@ -6,27 +6,30 @@
     <title>Pokemon</title>
 
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="src/img/pokeball-icon.png" type="image/png">
+    <link rel="icon" href="src/img/icon.png" type="image/png">
 
 </head>
 <body>
 
     <div id="screen-container">
         <div id="left-container">
-            <div id="team-window" class="window">
+            <!-- <div id="team-window" class="window">
+                team stuff -->
             </div>
-            <canvas id="game-canvas">
-            </canvas>
+            <!-- all the main screen stuff -->
+            <canvas id="game-canvas"></canvas>
             <img class="sprite" id="playerImg" src="src/img/player.png" alt="">
-            <img class="sprite" id="tileSet" src="src/img/waterAnimationTiles.png" alt="">
-            <img class="sprite" id="buildingTiles" src="src/img/buildings.png" alt="">
+            <img class="sprite" id="animatedTilesetImg" src="src/img/animated.png" alt="">
+            <img class="sprite" id="buildingTilesetImg" src="src/img/buildings.png" alt="">
+            <img class="sprite" id="groundTilesetImg" src="src/img/ground.png" alt="">
         </div>
-        <div id="right-container">
+        <p style="width: 100%; background-color:darkgray;">Click or touch to move and interact!</p>
+        <!-- <div id="right-container">
             <div id="inventory-window" class="window">
              </div>
              <div id="chat-window" class="window">
              </div>
-         </div>
+         </div> -->
     </div>
 
 </body>

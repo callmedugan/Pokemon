@@ -16,7 +16,7 @@ export class EventHandler{
 
     startEvent(x, y){
         this.currentEvent = this.map.map.getEventData(x, y);
-        console.log(this.currentEvent);
+        //console.log(this.currentEvent);
         if(this.currentEvent){
             this.doWarpEvent();
         }

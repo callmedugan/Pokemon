@@ -29,6 +29,11 @@ export class MapHandler{
         //this will be the current rendered map
         this.currentMapID = 0;
         this.map = new Map(game, this.currentMapID);
+
+        //map tileset imgs
+        this.buildingTilesetImg = document.getElementById('buildingTilesetImg');
+        this.animatedTilesetImg = document.getElementById('animatedTilesetImg');
+        this.groundTilesetImg = document.getElementById('groundTilesetImg');
     }
 
     update(ctx, deltaTime){
@@ -68,6 +73,14 @@ export class MapHandler{
         let clickedMapTileX = Math.floor((x - mapDrawX)/16);
         let clickedMapTileY = Math.floor((y - mapDrawY)/16);
 
+        //check to see if we clicked within the map
+        if(     clickedMapTileX < 0 || clickedMapTileY < 0 ||
+                clickedMapTileY > this.map.collision.length - 1 ||
+                clickedMapTileX > this.map.collision[0].length - 1){
+            console.log('clicked out of bounds');
+            return;
+        }
+
         //check the map event tiles to see if we clicked an event and
         const clickedEvent = this.map.checkClickedTileForEvent(clickedMapTileX, clickedMapTileY);
         if(clickedEvent) this.player.setEventTarget(clickedMapTileX, clickedMapTileY);
@@ -93,31 +106,34 @@ export class MapHandler{
 
     drawTileMap(ctx, deltaTime){
 
+        ///////everything is rendered top-down and then after, the draw mode is changed to put overheads on top
+
         //get the building tileset
-        const buildingTileSetImg = document.getElementById('buildingTiles');
-        this.actuallyDrawTileMap(ctx, this.map.building, buildingTileSetImg, false);
+        if(this.map.building.length > 0)
+        this.actuallyDrawTileMap(ctx, this.map.building, this.buildingTilesetImg, false);
 
         //ground tiles
-        const tileSetImg = document.getElementById('tileSet');
-        this.actuallyDrawTileMap(ctx, this.map.ground, tileSetImg, false);
+        if(this.map.ground.length > 0)
+        this.actuallyDrawTileMap(ctx, this.map.ground, this.groundTilesetImg, false);
 
         //animated tiles
-        const tileSetWidth = tileSetImg.width/16;
-        this.animTimer += deltaTime;
-        const animCycleDuration = tileSetWidth * this.animFrameTick;
-        if(this.animTimer >= animCycleDuration) this.animTimer -= animCycleDuration;
-        const animIndex = Math.floor(this.animTimer/this.animFrameTick);
+        if(this.map.animated.length > 0){
+            const tileSetWidth = this.animatedTilesetImg.width/16;
+            this.animTimer += deltaTime;
+            const animCycleDuration = tileSetWidth * this.animFrameTick;
+            if(this.animTimer >= animCycleDuration) this.animTimer -= animCycleDuration;
+            const animIndex = Math.floor(this.animTimer/this.animFrameTick);
+            //draw
+            this.actuallyDrawTileMap(ctx, this.map.animated, this.animatedTilesetImg, true, animIndex);
+        }   
 
-        this.actuallyDrawTileMap(ctx, this.map.animated, tileSetImg, true, animIndex);
-
+        
         //overheads
-        //reset the ctx drawing method
-        ctx.globalCompositeOperation = 'source-over';
-
-        this.actuallyDrawTileMap(ctx, this.map.overhead, buildingTileSetImg, false);
-
-        //reset the ctx drawing method
-        ctx.globalCompositeOperation = 'destination-over';
+        if(this.map.overhead.length > 0){
+            ctx.globalCompositeOperation = 'source-over';
+            this.actuallyDrawTileMap(ctx, this.map.overhead, this.buildingTilesetImg, false);
+            ctx.globalCompositeOperation = 'destination-over';
+        }
 
     }
 
@@ -141,10 +157,10 @@ export class MapHandler{
 
     getCollisionMatrixAsBinary(playerX, playerY){
         const collision = this.map.collision;
-        const playerTile = collision[playerX][playerY];
+        const playerTile = collision[playerY][playerX];
         //convert tile number to x,y number
         const playerDepth = Math.floor(playerTile/2);
-        //const tileX = playerTile % 2;
+        //let matrix = collision[0].map((_, colIndex) => collision.map(row => row[colIndex]));
         let matrix = Array.from(collision);
         //loop through the collision array to return a 0-1 matrix of walkable vs non-walkable tiles
         for (let x = 0; x < collision.length; x++) {
