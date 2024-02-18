@@ -8,8 +8,8 @@ const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 
 //set the width and height since the canvas is not inherently set by css
-canvas.height = 400;
 canvas.width = 400;
+canvas.height = 400;
 
 class Game{
 
@@ -50,6 +50,8 @@ class Game{
 
 }
 
+
+
 //add listener for when all imgs and resources are loaded
 window.addEventListener('load', function(){
 
@@ -78,3 +80,4 @@ window.addEventListener('load', function(){
     mainUpdateLoop(0);
 
 });
+

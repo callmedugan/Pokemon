@@ -112,12 +112,6 @@ export class Player{
         //get binary collision map
         let collision = this.game.map.getCollisionMatrixAsBinary(this.positionX, this.positionY);
 
-        //determine if the target is within the pathfinding matrix - should be handled on the click
-        // if( x < 0 || y < 0 || x >= collision.length - 1 || y >= collision[0].length - 1){
-        //     console.log('clicked out of bounds');
-        //     return [0, 0];
-        // }
-
         //set the event as walkable to find a path to a wall or unwalkable tile
         if(this.targetIsEvent){
             //coordinates are backwards on purpose

@@ -37,7 +37,10 @@ export class MapHandler{
     }
 
     update(ctx, deltaTime){
-        
+       
+        //save context state
+        ctx.save();
+
         //draw the map based off of player position
         ctx.translate(  (-this.player.positionX + this.player.drawX) * 16 - this.pixelOffsetX,
                         (-this.player.positionY + this.player.drawY) * 16 - this.pixelOffsetY
@@ -57,7 +60,7 @@ export class MapHandler{
         this.drawTileMap(ctx, deltaTime);
 
         //reset the translations
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.restore();
        
     }
 

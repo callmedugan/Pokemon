@@ -36,6 +36,8 @@ body{
 }
 
 #game-canvas{
+    /* image-rendering: pixelated; */
+    image-rendering: crisp-edges;
     width: 400px;
     height: var(--screen-height);
     background-color: black;
