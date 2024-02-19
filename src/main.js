@@ -7,19 +7,21 @@ import { EventHandler } from "./EventHandler.js";
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
 
-//set the width and height since the canvas is not inherently set by css
-canvas.style.height = '400px'
-canvas.style.width = '400px'
-canvas.width = 400;
-canvas.height = 400;
-
 class Game{
 
     constructor(){
+        //set the width and height since the canvas is not inherently set by css
+        this.virtualHeight = 400;
+        this.virtualWidth = 400;
+        this.scale = 2;
+
+        canvas.style.height = this.virtualHeight + 'px'
+        canvas.style.width = this.virtualWidth + 'px'
+        canvas.height = this.virtualHeight / this.scale;
+        canvas.width = this.virtualWidth / this.scale;
+
         this.width = canvas.width;
         this.height = canvas.height;
-        //scale
-        this.scale = 1;
         //create an instance of a player class
         this.player = new Player(this);
         this.tick = 300;

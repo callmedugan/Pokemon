@@ -70,11 +70,8 @@ export class MapHandler{
     }
 
     onClickedTile(x, y){
-        const mapDrawX = (-this.player.positionX + this.player.drawX) * 16;
-        const mapDrawY = (-this.player.positionY + this.player.drawY) * 16;
-
-        let clickedMapTileX = Math.floor((x - mapDrawX)/16);
-        let clickedMapTileY = Math.floor((y - mapDrawY)/16);
+        //destructure the return array to 2 seperate vars for readability
+        const [clickedMapTileX, clickedMapTileY] = this.getTileCoordinatesFromPointerPosition(x, y);
 
         //check to see if we clicked within the map
         if(     clickedMapTileX < 0 || clickedMapTileY < 0 ||
@@ -93,14 +90,23 @@ export class MapHandler{
     onHoverTile(x, y){
         if(this.isMouseHovering && this.mouseHoverX === x && this.mouseHoverY === y) return;
         this.isMouseHovering = true;
-        const mapDrawX = (-this.player.positionX + this.player.drawX) * 16;
-        const mapDrawY = (-this.player.positionY + this.player.drawY) * 16;
 
-        this.mouseHoverX = Math.floor((x - mapDrawX)/16);
-        this.mouseHoverY = Math.floor((y - mapDrawY)/16);
+        //destructure the return array to 2 seperate vars for readability
+        [this.mouseHoverX, this.mouseHoverY] = this.getTileCoordinatesFromPointerPosition(x, y);
 
         //USE THIS TO DEBUG PATHS
         //this.mouseHoverPath = this.player.getPath(this.mouseHoverX, this.mouseHoverY);
+    }
+
+    getTileCoordinatesFromPointerPosition(x, y){
+        //x and y are brought in as screen space relative to the canvas and returned as a tile coordinate
+        const mapDrawX = (-this.player.positionX + this.player.drawX) * 16 * this.game.scale;
+        const mapDrawY = (-this.player.positionY + this.player.drawY) * 16 * this.game.scale;
+
+        let returnX = Math.floor((x - mapDrawX)/(16 * this.game.scale));
+        let returnY = Math.floor((y - mapDrawY)/(16 * this.game.scale));
+
+        return[returnX, returnY];
     }
 
     noLongerHoveringOverTile(){

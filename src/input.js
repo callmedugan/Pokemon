@@ -1,9 +1,8 @@
 export class InputHandler{
     constructor(game, ctx){
-        //track pressed keys in a array
         this.game = game;
         this.canvas = ctx.canvas;
-        this.canvasRect = new DOMRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        this.canvasRect = new DOMRect(0, 0, this.game.virtualWidth, this.game.virtualHeight);
         this.allowPlayerMovement = true;
 
         window.addEventListener('touchstart', e => {
