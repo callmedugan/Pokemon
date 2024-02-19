@@ -11,15 +11,10 @@ class Game{
 
     constructor(){
         //set the width and height since the canvas is not inherently set by css
-        this.virtualHeight = 400;
-        this.virtualWidth = 400;
-        this.scale = 2;
-
-        canvas.style.height = this.virtualHeight + 'px'
-        canvas.style.width = this.virtualWidth + 'px'
-        canvas.height = this.virtualHeight / this.scale;
-        canvas.width = this.virtualWidth / this.scale;
-
+        this.virtualHeight = 368;
+        this.virtualWidth = 368;
+        this.scale = 1.5;
+        this.setCanvasSize();
         this.width = canvas.width;
         this.height = canvas.height;
         //create an instance of a player class
@@ -53,9 +48,14 @@ class Game{
         this.player.tickStart(this.input.keys, ctx, deltaTime);
     }
 
+    setCanvasSize(){
+        canvas.style.height = this.virtualHeight + 'px'
+        canvas.style.width = this.virtualWidth + 'px'
+        canvas.height = this.virtualHeight / this.scale;
+        canvas.width = this.virtualWidth / this.scale;
+    }
+
 }
-
-
 
 //add listener for when all imgs and resources are loaded
 window.addEventListener('load', function(){
