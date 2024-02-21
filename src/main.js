@@ -19,7 +19,7 @@ class Game{
         this.height = canvas.height;
         //create an instance of a player class
         this.player = new Player(this, 13, 10);
-        this.tick = 300;
+        this.tick = 500;
         this.oldTimeStamp = 0;
         this.tickTimer = 0;
         //create a map instance

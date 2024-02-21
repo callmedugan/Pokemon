@@ -146,10 +146,4 @@ export class Character{
          this.targetIsEvent = false;
      }
  
-    //  mapWarp(playerX, playerY, direction){
-    //      this.positionX = playerX;
-    //      this.positionY = playerY;
-    //      this.moveDirection = direction;
-    //      this.movePath = [];
-    //  }
 }

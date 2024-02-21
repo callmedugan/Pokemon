@@ -20,7 +20,7 @@ export class Animator{
         this.usingRightFoot = !this.usingRightFoot;
     }
 
-    update(img, ctx, game, drawX, drawY, sizeX, sizeY, direction, isMoving, xOffset = 0, yOffset = 0){
+    update(img, ctx, game, drawX, drawY, sizeX, sizeY, direction, isMoving){
         const tTimer = game.tickTimer;
         const t = game.tick;
         //find the percentage between the tick timer and tick length and use it to pick a sprite
@@ -31,7 +31,7 @@ export class Animator{
         ctx.drawImage(img,
             (this.spriteID * spriteSheetWidth * sizeX) + spriteX * sizeX,
             direction * sizeY, sizeX, sizeY,
-            drawX + xOffset, drawY + yOffset, sizeX, sizeY);
+            drawX, drawY, sizeX, sizeY);
         
     }
 

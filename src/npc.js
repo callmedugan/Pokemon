@@ -24,13 +24,15 @@ export class Npc extends Character{
         const xOffset = 16 - this.sizeX;
         const yOffset = 16 - this.sizeY;
         const isAnimatingThisTick = this.hasAnimation && this.movePath.length > 1;
-        const smoothOffset = Math.floor(this.animator.getAnimationMovementOffset(this.game, isAnimatingThisTick) / 16);
+        const smoothOffset = this.animator.getAnimationMovementOffset(this.game, isAnimatingThisTick);
         const directionOffset = this.getPixelOffset(smoothOffset);
+        const drawX = this.positionX * 16 + xOffset + directionOffset.x;
+        const drawY = this.positionY * 16 + yOffset + directionOffset.y;
+        console.log(smoothOffset);
         this.animator.update(   this.img, ctx, this.game,
-                                this.positionX * 16 + xOffset,
-                                this.positionY * 16 + yOffset, 
-                                this.sizeX, this.sizeY, this.moveDirection, isAnimatingThisTick,
-                                directionOffset[0], directionOffset[1]);
+                                drawX, drawY,
+                                this.sizeX, this.sizeY,
+                                this.moveDirection, isAnimatingThisTick);
     }
 
     tickStart(){
@@ -46,24 +48,14 @@ export class Npc extends Character{
     }
 
     getPixelOffset(offset){
-        const r = [0,0];
-        if(this.direction === directions.DOWN){
-            r[0] = 0;
-            r[1] = offset;
-        }
-        else if(this.direction === directions.UP){
-            r[0] = 0;
-            r[1] = -offset;
-        }
-        else if(this.direction === directions.LEFT){
-            r[0] = -offset;
-            r[1] = 0;
-        }
-        else{ //direction === directions.RIGHT
-            r[0] = offset;
-            r[1] = 0;
-        }
-        return r;
+        if(this.moveDirection === directions.DOWN)
+            return {x: 0, y: offset};
+        else if(this.moveDirection === directions.UP)
+            return {x: 0, y: -offset};
+        else if(this.moveDirection === directions.LEFT)
+            return {x: -offset, y: 0};
+        else 
+            return {x: offset, y:0};
     }
 
 }
