@@ -34,18 +34,11 @@ export class MapHandler{
         this.buildingTilesetImg = document.getElementById('buildingTilesetImg');
         this.animatedTilesetImg = document.getElementById('animatedTilesetImg');
         this.groundTilesetImg = document.getElementById('groundTilesetImg');
+
     }
 
     update(ctx, deltaTime){
        
-        //save context state
-        ctx.save();
-
-        //draw the map based off of player position
-        ctx.translate(  (-this.player.positionX + this.player.drawX) * 16 - this.pixelOffsetX,
-                        (-this.player.positionY + this.player.drawY) * 16 - this.pixelOffsetY
-                        );
-
         //drawing the tile markers
         if(this.player.hasMoveTarget)
         this.drawTileMarker(ctx, this.player.moveTargetX, this.player.moveTargetY, true);
@@ -58,10 +51,14 @@ export class MapHandler{
 
         //draw the tilemap
         this.drawTileMap(ctx, deltaTime);
-
-        //reset the translations
-        ctx.restore();
        
+    }
+
+    setCanvasOffset(ctx){
+        //draw the map based off of player position
+        ctx.translate(  (-this.player.positionX + this.player.drawX) * 16 - this.pixelOffsetX,
+        (-this.player.positionY + this.player.drawY) * 16 - this.pixelOffsetY
+        );
     }
 
     drawTileMarker(ctx, x, y, isClicked){

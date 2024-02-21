@@ -5,18 +5,22 @@ const directions = {
     RIGHT: 3
 }
 
+//how many sprites wide is each different overworld character
+const spriteSheetWidth = 4;
+
 export class Animator{
-    constructor(){
+    constructor(spriteID){
         this.directionFacing = directions.DOWN;
         this.animationFrameCount = 2;
         this.usingRightFoot = false;
+        this.spriteID = spriteID;
     }
 
     tickStart(){
         this.usingRightFoot = !this.usingRightFoot;
     }
 
-    update(img, ctx, game, drawX, drawY, sizeX, sizeY, direction, isMoving){
+    update(img, ctx, game, drawX, drawY, sizeX, sizeY, direction, isMoving, xOffset = 0, yOffset = 0){
         const tTimer = game.tickTimer;
         const t = game.tick;
         //find the percentage between the tick timer and tick length and use it to pick a sprite
@@ -25,8 +29,10 @@ export class Animator{
         if(spriteX === 1 && this.usingRightFoot) spriteX = 3;
         //draw player
         ctx.drawImage(img,
-            spriteX * sizeX, direction * sizeY, sizeX, sizeY,
-            drawX, drawY, sizeX, sizeY);
+            (this.spriteID * spriteSheetWidth * sizeX) + spriteX * sizeX,
+            direction * sizeY, sizeX, sizeY,
+            drawX + xOffset, drawY + yOffset, sizeX, sizeY);
+        
     }
 
     getAnimationMovementOffset(game, isMoving){
