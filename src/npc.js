@@ -43,7 +43,8 @@ export class Npc extends Character{
             const y = Math.floor(Math.random() * this.wanderRadius * 2 - this.wanderRadius);
             const targetX = this.positionX + x;
             const targetY = this.positionY + y;
-            this.setMoveTarget(targetX, targetY);
+            if(this.game.mapHandler.checkIfTileIsWithinMap(targetX, targetY))
+                this.setMoveTarget(targetX, targetY);
         }
         this.base_tickStart();
     }

@@ -27,7 +27,7 @@ export class MapHandler{
         this.pixelOffsetY = 0;
 
         //this will be the current rendered map
-        this.currentMapID = 3;
+        this.currentMapID = 0;
         this.map = new Map(game, this.currentMapID);
 
         //map tileset imgs
@@ -90,17 +90,17 @@ export class MapHandler{
         const [clickedMapTileX, clickedMapTileY] = this.getTileCoordinatesFromPointerPosition(x, y);
 
         //check to see if we clicked within the map
-        if(     clickedMapTileX < 0 || clickedMapTileY < 0 ||
-                clickedMapTileY > this.map.collision.length - 1 ||
-                clickedMapTileX > this.map.collision[0].length - 1){
-            console.log('clicked out of bounds');
-            return;
-        }
+        if(!this.checkIfTileIsWithinMap(clickedMapTileX, clickedMapTileY)) return;
 
         //check the map event tiles to see if we clicked an event and
         const clickedEvent = this.map.checkClickedTileForEvent(clickedMapTileX, clickedMapTileY);
         if(clickedEvent) this.player.setEventTarget(clickedMapTileX, clickedMapTileY);
         else this.player.setMoveTarget(clickedMapTileX, clickedMapTileY);
+    }
+
+    checkIfTileIsWithinMap(x, y){
+        //check to see if we clicked within the map
+        return x >= 0 && y >= 0 && y < this.map.collision.length && x < this.map.collision[0].length;
     }
 
     onHoverTile(e){

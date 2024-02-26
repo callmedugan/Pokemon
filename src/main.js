@@ -44,11 +44,10 @@ class Game{
         this.player.update(ctx);
         //now save and shift the drawing of the canvas to be offset by the playerPos through the mapHandler to be 
         //used by the npcs as well
-        ctx.save();
         this.mapHandler.setCanvasOffset(ctx);
         this.npcHandler.update(ctx);
         this.mapHandler.update(ctx, deltaTime);
-        ctx.restore();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         
     }
 
