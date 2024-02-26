@@ -9,7 +9,7 @@ const directions = {
 }
 
 export class Npc extends Character{
-    constructor(game, posX, posY, spriteID){
+    constructor(game, posX, posY, spriteID, npcID){
         super(game, spriteID);
         //map position
         this.positionX = posX;
@@ -17,6 +17,8 @@ export class Npc extends Character{
         //movement stuff
         this.wanderRadius = 2;
         this.wanderChance = 0.2;
+        //tracking
+        this.id = npcID;
     }
 
     update(ctx){
@@ -28,7 +30,6 @@ export class Npc extends Character{
         const directionOffset = this.getPixelOffset(smoothOffset);
         const drawX = this.positionX * 16 + xOffset + directionOffset.x;
         const drawY = this.positionY * 16 + yOffset + directionOffset.y;
-        console.log(smoothOffset);
         this.animator.update(   this.img, ctx, this.game,
                                 drawX, drawY,
                                 this.sizeX, this.sizeY,

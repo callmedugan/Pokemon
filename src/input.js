@@ -8,27 +8,53 @@ export class InputHandler{
         window.addEventListener('touchstart', e => {
             //determine if touch was within the canvas
             if(this.allowPlayerMovement && this.isMouseEventInCanvas(e))
-            this.game.map.onClickedTile(e.pageX - this.canvasRect.x, e.pageY - this.canvasRect.y);
+            {
+                const onClickedTile = new CustomEvent('onClickedTile', {
+                    detail: {
+                    x: e.pageX - this.canvasRect.x,
+                    y: e.pageY - this.canvasRect.y
+                    },
+                });
+                window.dispatchEvent(onClickedTile);
+            }
         })
 
         window.addEventListener('mousedown', e => {
             //determine if click was within the canvas
             if(this.allowPlayerMovement && this.isMouseEventInCanvas(e))
-            this.game.map.onClickedTile(e.pageX - this.canvasRect.x, e.pageY - this.canvasRect.y);
+            {
+                const onClickedTile = new CustomEvent('onClickedTile', {
+                    detail: {
+                    x: e.pageX - this.canvasRect.x,
+                    y: e.pageY - this.canvasRect.y
+                    },
+                });
+                window.dispatchEvent(onClickedTile);
+            }
         })
 
         window.addEventListener('mousemove', e => {
             //determine if mouse click was within the canvas
-            if(this.allowPlayerMovement && this.isMouseEventInCanvas(e))
-            this.game.map.onHoverTile(e.pageX - this.canvasRect.x, e.pageY - this.canvasRect.y);
-            else
-            this.game.map.noLongerHoveringOverTile();
+            if(this.allowPlayerMovement && this.isMouseEventInCanvas(e)) {
+                const onHoverTile = new CustomEvent('onHoverTile', {
+                    detail: {
+                    x: e.pageX - this.canvasRect.x,
+                    y: e.pageY - this.canvasRect.y
+                    },
+                });
+                window.dispatchEvent(onHoverTile);
+            }
+            else {
+                const onHoverTileStopped = new CustomEvent('onHoverTileStopped');
+                window.dispatchEvent(onHoverTileStopped);
+            }
         })
 
         //only recalculate the canvas rect if the page has been modified in some way
         window.addEventListener('load', this.calculateCanvasRect());
         window.addEventListener('scroll', this.calculateCanvasRect());
         window.addEventListener('resize', this.calculateCanvasRect());
+
     };
 
     //returns if mouse event was within the canvas

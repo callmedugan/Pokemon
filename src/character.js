@@ -97,7 +97,7 @@ export class Character{
  
      getPath(x, y){
          //get binary collision map
-         let collision = this.game.map.getCollisionMatrixAsBinary(this.positionX, this.positionY);
+         let collision = this.game.mapHandler.getCollisionMatrixAsBinary(this.positionX, this.positionY);
  
          //set the event as walkable to find a path to a wall or unwalkable tile
          if(this.targetIsEvent){
@@ -137,13 +137,13 @@ export class Character{
  
      //called when we reach the target
      onTargetReached(){
-         if(this.targetIsEvent){
-             this.setFaceDirection();
-             this.game.eventHandler.startEvent(this.moveTargetX, this.moveTargetY);
-         }
          this.hasMoveTarget = false;
          this.hasAnimation = false;
          this.targetIsEvent = false;
+     }
+
+     getPosition(){
+        return[this.positionX, this.positionY];
      }
  
 }

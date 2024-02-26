@@ -21,6 +21,11 @@ export class Player extends Character{
         this.targetIsEvent = false;
         this.playerCanMove = true;
 
+        //events
+        window.addEventListener('onMapWarp', e => {
+            this.onMapWarp(e);
+        });
+
     }
 
     //called at the beginning of every tick
@@ -37,7 +42,7 @@ export class Player extends Character{
         //update the maps pixel offset - we have to ask if we want to move the map this tick
         const isAnimatingThisTick = this.hasAnimation && this.movePath.length > 1;
         const offset = this.animator.getAnimationMovementOffset(this.game, isAnimatingThisTick);
-        this.game.map.setMapPixelOffset(offset, this.moveDirection);
+        this.game.mapHandler.setMapPixelOffset(offset, this.moveDirection);
         //call animator update
         this.animator.update(this.img, ctx, this.game, this.drawX * 16 + xOffset, this.drawY * 16 + yOffset, this.sizeX, this.sizeY, this.moveDirection, isAnimatingThisTick);
     }
@@ -47,10 +52,28 @@ export class Player extends Character{
         this.targetIsEvent = true;
     }
 
-    mapWarp(playerX, playerY, direction){
-        this.positionX = playerX;
-        this.positionY = playerY;
-        this.moveDirection = direction;
+    //called when we reach the target - this overrides the character ontargetreached method
+    onTargetReached(){
+        if(this.targetIsEvent){
+            this.setFaceDirection();
+            //this.game.eventHandler.startEvent(this.moveTargetX, this.moveTargetY);
+            const onClickedTile = new CustomEvent('startEvent', {
+                detail: {
+                    x: this.moveTargetX,
+                    y: this.moveTargetY
+                },
+            });
+            window.dispatchEvent(onClickedTile);
+        }
+        this.hasMoveTarget = false;
+        this.hasAnimation = false;
+        this.targetIsEvent = false;
+    }
+
+    onMapWarp(e){
+        this.positionX = e.detail.x;
+        this.positionY = e.detail.y;
+        this.moveDirection = e.detail.dir;
         this.movePath = [];
     }
 

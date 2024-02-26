@@ -27,13 +27,30 @@ export class MapHandler{
         this.pixelOffsetY = 0;
 
         //this will be the current rendered map
-        this.currentMapID = 0;
+        this.currentMapID = 3;
         this.map = new Map(game, this.currentMapID);
 
         //map tileset imgs
         this.buildingTilesetImg = document.getElementById('buildingTilesetImg');
         this.animatedTilesetImg = document.getElementById('animatedTilesetImg');
         this.groundTilesetImg = document.getElementById('groundTilesetImg');
+
+        //set up listener events
+        window.addEventListener('onClickedTile', e => {
+            this.onClickedTile(e);
+        });
+
+        window.addEventListener('onHoverTile', e => {
+            this.onHoverTile(e);
+        });
+
+        window.addEventListener('onHoverTileStopped', e =>{
+            this.onHoverTileStopped();
+        });
+
+        window.addEventListener('onMapWarp', e => {
+            this.onMapWarp(e);
+        });
 
     }
 
@@ -66,7 +83,9 @@ export class MapHandler{
         ctx.fillRect(   x * 16, y * 16, 16, 16);
     }
 
-    onClickedTile(x, y){
+    onClickedTile(e){
+        const x = e.detail.x;
+        const y = e.detail.y;
         //destructure the return array to 2 seperate vars for readability
         const [clickedMapTileX, clickedMapTileY] = this.getTileCoordinatesFromPointerPosition(x, y);
 
@@ -84,7 +103,9 @@ export class MapHandler{
         else this.player.setMoveTarget(clickedMapTileX, clickedMapTileY);
     }
 
-    onHoverTile(x, y){
+    onHoverTile(e){
+        const x = e.detail.x;
+        const y = e.detail.y;
         if(this.isMouseHovering && this.mouseHoverX === x && this.mouseHoverY === y) return;
         this.isMouseHovering = true;
 
@@ -106,7 +127,7 @@ export class MapHandler{
         return[returnX, returnY];
     }
 
-    noLongerHoveringOverTile(){
+    onHoverTileStopped(){
         this.isMouseHovering = false;
     }
 
@@ -117,10 +138,6 @@ export class MapHandler{
         //get the building tileset
         if(this.map.building.length > 0)
         this.actuallyDrawTileMap(ctx, this.map.building, this.buildingTilesetImg, false);
-
-        //ground tiles
-        if(this.map.ground.length > 0)
-        this.actuallyDrawTileMap(ctx, this.map.ground, this.groundTilesetImg, false);
 
         //animated tiles
         if(this.map.animated.length > 0){
@@ -133,6 +150,9 @@ export class MapHandler{
             this.actuallyDrawTileMap(ctx, this.map.animated, this.animatedTilesetImg, true, animIndex);
         }   
 
+        //ground tiles
+        if(this.map.ground.length > 0)
+        this.actuallyDrawTileMap(ctx, this.map.ground, this.groundTilesetImg, false);
         
         //overheads
         if(this.map.overhead.length > 0){
@@ -200,8 +220,16 @@ export class MapHandler{
         }
     }
 
-    mapWarp(mapID){
-        this.map.setMapByID(mapID);
+    onMapWarp(e){
+        //sets the map
+        this.map.setMapByID(e.detail.id);
+        //event to npc handler
+        const populateNpcData = new CustomEvent('populateNpcData', {
+            detail: {
+                data: this.map.npcData
+            }
+        });
+        window.dispatchEvent(populateNpcData);
     }
 
 }

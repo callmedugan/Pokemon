@@ -3,6 +3,7 @@ import { InputHandler } from "./input.js";
 import { MapHandler } from "./mapHandler.js";
 import { EventHandler } from "./EventHandler.js";
 import { Npc } from "./npc.js";
+import { NpcHandler } from "./NpcHandler.js";
 
 const canvas = document.getElementById("game-canvas");
 const ctx = canvas.getContext("2d");
@@ -19,19 +20,18 @@ class Game{
         this.height = canvas.height;
         //create an instance of a player class
         this.player = new Player(this, 13, 10);
-        this.tick = 500;
+        this.tick = 400;
         this.oldTimeStamp = 0;
         this.tickTimer = 0;
         //create a map instance
-        this.map = new MapHandler(this);
+        this.mapHandler = new MapHandler(this);
         //create input handler
         this.input = new InputHandler(this, ctx);
         //create event handler which will override functionality in multiple components
-        this.eventHandler = new EventHandler(this, this.map, this.player, this.input);
+        this.eventHandler = new EventHandler(this, this.mapHandler, this.player, this.input);
 
         //characters
-        this.npc = new Npc(this, 15, 10, 1);
-        
+        this.npcHandler = new NpcHandler(this);
 
     }
 
@@ -45,9 +45,9 @@ class Game{
         //now save and shift the drawing of the canvas to be offset by the playerPos through the mapHandler to be 
         //used by the npcs as well
         ctx.save();
-        this.map.setCanvasOffset(ctx);
-        this.npc.update(ctx);
-        this.map.update(ctx, deltaTime);
+        this.mapHandler.setCanvasOffset(ctx);
+        this.npcHandler.update(ctx);
+        this.mapHandler.update(ctx, deltaTime);
         ctx.restore();
         
     }
@@ -55,7 +55,7 @@ class Game{
     //runs at the start of every virtual game tick
     tickStart(deltaTime, ctx){
         this.player.tickStart();
-        this.npc.tickStart();
+        this.npcHandler.tickStart();
     }
 
     setCanvasSize(){
