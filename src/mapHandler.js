@@ -164,10 +164,17 @@ export class MapHandler{
     }
 
     actuallyDrawTileMap(ctx, tileArray, tileImg, isAnimated = false, animIndex = 0){
+        //only draw visible tiles
+        const w = Math.ceil(this.game.width/16);
+        const h = Math.ceil(this.game.height/16);
+        const wMin = this.player.positionX - (w / 2);
+        const wMax = wMin + w + 2;
+        const hMin = this.player.positionY - (h / 2);
+        const hMax = hMin + h + 2;
         //needed to properly loop values not on the first row
         const tileMapImgWidth = tileImg.width/16;
-        for (let x = 0; x < tileArray.length; x++) {
-            for (let y = 0; y < tileArray[x].length; y++) {
+        for (let x = hMin < 0 ? 0 : hMin; x < tileArray.length && x < hMax; x++) {
+            for (let y = wMin < 0 ? 0 : wMin; y < tileArray[x].length && y < wMax; y++) {
                 const tile = tileArray[x][y];
                 //skip empty tiles
                 if(tile !== -1){
